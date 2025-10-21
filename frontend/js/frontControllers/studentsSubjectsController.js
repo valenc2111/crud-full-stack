@@ -141,34 +141,33 @@ function clearForm()
     document.getElementById('relationId').value = '';
 }
 
-async function loadRelations() 
-{
-    try 
-    {
-        const relations = await studentsSubjectsAPI.c
-        
-        /**
-         * DEBUG
-         */
-        //console.log(relations);
+async function loadRelations() {
+    try {
+        const limitSelect = document.getElementById('resultsPerPage');
+        const limit = parseInt(limitSelect.value, 10);
 
-        /**
-         * En JavaScript: Cualquier string que no esté vacío ("") es considerado truthy.
-         * Entonces "0" (que es el valor que llega desde el backend) es truthy,
-         * ¡aunque conceptualmente sea falso! por eso: 
-         * Se necesita convertir ese string "0" a un número real 
-         * o asegurarte de comparar el valor exactamente. 
-         * Con el siguiente código se convierten todos los string approved a enteros.
-         */
-        relations.forEach(rel => 
-        {
+        // ✅ Ejecutamos la función correctamente
+        const relations = await studentsSubjectsAPI.c();
+
+        if (!relations || !Array.isArray(relations)) {
+            throw new Error("Respuesta inválida del servidor");
+        }
+
+        // Convertir el campo approved a número
+        relations.forEach(rel => {
             rel.approved = Number(rel.approved);
         });
-        
-        renderRelationsTable(relations);
-    } 
-    catch (err) 
-    {
+
+        const totalItems = relations.length;
+        totalPages = Math.ceil(totalItems / limit);
+
+        const startIndex = (currentPage - 1) * limit;
+        const endIndex = startIndex + limit;
+        const pageData = relations.slice(startIndex, endIndex);
+
+        renderRelationsTable(pageData);
+        updatePaginationInfo(totalItems);
+    } catch (err) {
         console.error('Error cargando inscripciones:', err.message);
     }
 }
