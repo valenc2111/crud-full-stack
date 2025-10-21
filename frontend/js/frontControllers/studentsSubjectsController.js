@@ -12,13 +12,48 @@ import { studentsAPI } from '../apiConsumers/studentsAPI.js';
 import { subjectsAPI } from '../apiConsumers/subjectsAPI.js';
 import { studentsSubjectsAPI } from '../apiConsumers/studentsSubjectsAPI.js';
 
+//2.0
+//For pagination:
+let currentPage = 1;
+let totalPages = 1;
+const limit = 5;
+
 document.addEventListener('DOMContentLoaded', () => 
 {
     initSelects();
     setupFormHandler();
     setupCancelHandler();
     loadRelations();
+    setupPaginationControls();//2.0
 });
+
+function setupPaginationControls() 
+{
+    document.getElementById('prevPage').addEventListener('click', () => 
+    {
+        if (currentPage > 1) 
+        {
+            currentPage--;
+            loadRelations()
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => 
+    {
+        if (currentPage < totalPages) 
+        {
+            currentPage++;
+            loadRelations()
+        }
+    });
+
+    document.getElementById('resultsPerPage').addEventListener('change', e => 
+    {
+        currentPage = 1;
+        loadRelations()
+    });
+}
+
 
 async function initSelects() 
 {
@@ -110,7 +145,7 @@ async function loadRelations()
 {
     try 
     {
-        const relations = await studentsSubjectsAPI.fetchAll();
+        const relations = await studentsSubjectsAPI.c
         
         /**
          * DEBUG
