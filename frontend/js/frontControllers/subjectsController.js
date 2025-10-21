@@ -28,35 +28,30 @@ document.addEventListener('DOMContentLoaded', () =>
 //2.0
 function setupPaginationControls() 
 {
-  function setupPaginationControls() {
-  // Botón "Anterior"
-  document.getElementById('prevPage').addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      loadSubjects();
-    }
-  });
+    document.getElementById('prevPage').addEventListener('click', () => 
+    {
+        if (currentPage > 1) 
+        {
+            currentPage--;
+            loadStudents();
+        }
+    });
 
-  // Botón "Siguiente"
-  document.getElementById('nextPage').addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      loadSubjects();
-    }
-  });
+    document.getElementById('nextPage').addEventListener('click', () => 
+    {
+        if (currentPage < totalPages) 
+        {
+            currentPage++;
+            loadStudents();
+        }
+    });
 
-  // Cambio del selector de resultados por página
-  document.getElementById('resultsPerPage').addEventListener('change', (e) => {
-    const newLimit = parseInt(e.target.value);
-    if (newLimit >= 3 && newLimit <= 20) {   // aseguramos el rango
-      currentPage = 1;
-      loadSubjects();
-    }
-  });
+    document.getElementById('resultsPerPage').addEventListener('change', e => 
+    {
+        currentPage = 1;
+        loadStudents();
+    });
 }
-
-}
-
 /*async function loadSubjects()
 {
     try
