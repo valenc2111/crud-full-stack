@@ -28,14 +28,32 @@ document.addEventListener('DOMContentLoaded', () =>
 //2.0
 function setupPaginationControls() 
 {
-    document.getElementById('prevPage').addEventListener('click', () => 
-    {
-        if (currentPage > 1) 
-        {
-            currentPage--;
-            loadSubjects();
-        }
-    });
+  function setupPaginationControls() {
+  // Botón "Anterior"
+  document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      loadSubjects();
+    }
+  });
+
+  // Botón "Siguiente"
+  document.getElementById('nextPage').addEventListener('click', () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      loadSubjects();
+    }
+  });
+
+  // Cambio del selector de resultados por página
+  document.getElementById('resultsPerPage').addEventListener('change', (e) => {
+    const newLimit = parseInt(e.target.value);
+    if (newLimit >= 3 && newLimit <= 20) {   // aseguramos el rango
+      currentPage = 1;
+      loadSubjects();
+    }
+  });
+}
 
 }
 
