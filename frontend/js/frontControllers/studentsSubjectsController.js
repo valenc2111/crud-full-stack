@@ -142,34 +142,20 @@ function clearForm()
 }
 
 async function loadRelations() {
-    try {
-        const limitSelect = document.getElementById('resultsPerPage');
-        const limit = parseInt(limitSelect.value, 10);
+  try {
+    const limit = 5;
+    const offset = 0;
 
-        // ✅ Ejecutamos la función correctamente
-        const relations = await studentsSubjectsAPI.c();
+    // ✅ LLAMADA CORRECTA
+    const data = await studentsSubjectsAPI.getPaginated(limit, offset);
 
-        if (!relations || !Array.isArray(relations)) {
-            throw new Error("Respuesta inválida del servidor");
-        }
-
-        // Convertir el campo approved a número
-        relations.forEach(rel => {
-            rel.approved = Number(rel.approved);
-        });
-
-        const totalItems = relations.length;
-        totalPages = Math.ceil(totalItems / limit);
-
-        const startIndex = (currentPage - 1) * limit;
-        const endIndex = startIndex + limit;
-        const pageData = relations.slice(startIndex, endIndex);
-
-        renderRelationsTable(pageData);
-        updatePaginationInfo(totalItems);
-    } catch (err) {
-        console.error('Error cargando inscripciones:', err.message);
-    }
+    console.log('Inscripciones cargadas:', data);
+    data.forEach(item => {
+      console.log(`${item.student_fullname} → ${item.subject_name}`);
+    });
+  } catch (err) {
+    console.error('Error cargando inscripciones:', err);
+  }
 }
 
 function renderRelationsTable(relations) 
