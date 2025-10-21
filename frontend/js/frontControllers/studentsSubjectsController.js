@@ -147,7 +147,7 @@ async function loadRelations() {
     const offset = 0;
 
     // ✅ LLAMADA CORRECTA
-    const data = await studentsSubjectsAPI.getPaginated(limit, offset);
+    const relations = await studentsSubjectsAPI.fetchPaginated(page, limit);
 
     console.log('Inscripciones cargadas:', data);
     data.forEach(item => {
