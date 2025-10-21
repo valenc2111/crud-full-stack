@@ -31,7 +31,7 @@ function handleGet($conn)
         $total = getTotalStudents($conn);
 
         echo json_encode([
-            "subjects" => $subjects, // ya es array
+            "subjects" => $students, // ya es array
             'total' => $total        // ya es entero
         ]);
     } 
