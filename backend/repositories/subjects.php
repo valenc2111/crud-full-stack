@@ -19,7 +19,7 @@ function getAllSubjects($conn)
 //2.0
 function getPaginatedStudents($conn, $limit, $offset) 
 {
-    $stmt = $conn->prepare("SELECT * FROM Subjects LIMIT ? OFFSET ?");
+    $stmt = $conn->prepare("SELECT * FROM subjects  LIMIT ? OFFSET ?");
     $stmt->bind_param("ii", $limit, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -29,7 +29,7 @@ function getPaginatedStudents($conn, $limit, $offset)
 //2.0
 function  getTotalStudents($conn) 
 {
-    $sql = "SELECT COUNT(*) AS total FROM Subjectsgit ";
+    $sql = "SELECT COUNT(*) AS total FROM subjects  ";
     $result = $conn->query($sql);
     return $result->fetch_assoc()['total'];
 }
