@@ -142,20 +142,29 @@ function clearForm()
 }
 
 async function loadRelations() {
-  try {
-    const limit = 5;
-    const offset = 0;
+    try {
+        const response = await studentsSubjectsAPI.fetchPaginated(currentPage, limit);
 
-    // ✅ LLAMADA CORRECTA
-    const relations = await studentsSubjectsAPI.fetchPaginated(currentPage, limit);
+        // Si el backend devuelve { data, total }
+        const relations = response.data;
+        const total = response.total;
 
-    console.log('Inscripciones cargadas:', data);
-    data.forEach(item => {
-      console.log(`${item.student_fullname} → ${item.subject_name}`);
-    });
-  } catch (err) {
-    console.error('Error cargando inscripciones:', err);
-  }
+        // Calcula el número total de páginas
+        totalPages = Math.ceil(total / limit);
+
+        // Convierte el campo approved a número
+        relations.forEach(rel => {
+            rel.approved = Number(rel.approved);
+        });
+
+        renderRelationsTable(relations);
+
+        // Actualiza el texto de paginación
+        document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+    } 
+    catch (err) {
+        console.error('Error cargando inscripciones:', err.message);
+    }
 }
 
 function renderRelationsTable(relations) 
