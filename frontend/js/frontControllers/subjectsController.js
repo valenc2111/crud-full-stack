@@ -18,7 +18,7 @@ const limit = 5;
 
 document.addEventListener('DOMContentLoaded', () => 
 {
-    loadSubjects();
+    loadSubjects(); //2.0 modified
     setupSubjectFormHandler();
     setupCancelHandler();
     setupPaginationControls();//2.0
@@ -33,21 +33,35 @@ function setupPaginationControls()
         if (currentPage > 1) 
         {
             currentPage--;
-            loadStudents();
+            loadSubjects();
         }
     });
 
 }
 
+/*async function loadSubjects()
+{
+    try
+    {
+        const subjects = await subjectsAPI.fetchAll();
+        renderSubjectTable(subjects);
+    }
+    catch (err)
+    {
+        console.error('Error cargando materias:', err.message);
+    }
+}
+*/
+
 //2.0
-async function loadStudents()
+async function loadSubjects()
 {
     try 
     {
         const resPerPage = parseInt(document.getElementById('resultsPerPage').value, 10) || limit;
-        const data = await studentsAPI.fetchPaginated(currentPage, resPerPage);
+        const data = await subjectsAPI.fetchPaginated(currentPage, resPerPage);
         console.log(data);
-        renderStudentTable(data.students);
+        renderSubjectTable(data.subjects);
         totalPages = Math.ceil(data.total / resPerPage);
         document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
     } 
@@ -100,18 +114,6 @@ function setupCancelHandler()
     });
 }
 
-async function loadSubjects()
-{
-    try
-    {
-        const subjects = await subjectsAPI.fetchAll();
-        renderSubjectTable(subjects);
-    }
-    catch (err)
-    {
-        console.error('Error cargando materias:', err.message);
-    }
-}
 
 function renderSubjectTable(subjects)
 {
