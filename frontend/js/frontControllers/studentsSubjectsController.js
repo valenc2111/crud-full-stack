@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () =>
     setupFormHandler();
     setupCancelHandler();
     loadRelations();
+    setupPaginationControls();//2.0
 });
 
 async function initSelects() 
@@ -90,6 +91,34 @@ function setupCancelHandler()
     });
 }
 
+//2.0
+function setupPaginationControls() 
+{
+    document.getElementById('prevPage').addEventListener('click', () => 
+    {
+        if (currentPage > 1) 
+        {
+            currentPage--;
+            loadStudents();
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => 
+    {
+        if (currentPage < totalPages) 
+        {
+            currentPage++;
+            loadStudents();
+        }
+    });
+
+    document.getElementById('resultsPerPage').addEventListener('change', e => 
+    {
+        currentPage = 1;
+        loadStudents();
+    });
+}
+
 function getFormData() 
 {
     return{
@@ -105,6 +134,7 @@ function clearForm()
     document.getElementById('relationForm').reset();
     document.getElementById('relationId').value = '';
 }
+
 
 async function loadRelations() 
 {
