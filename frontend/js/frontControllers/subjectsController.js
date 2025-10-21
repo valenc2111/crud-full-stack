@@ -33,7 +33,7 @@ function setupPaginationControls()
         if (currentPage > 1) 
         {
             currentPage--;
-            loadStudents();
+             loadSubjects();
         }
     });
 
@@ -42,14 +42,14 @@ function setupPaginationControls()
         if (currentPage < totalPages) 
         {
             currentPage++;
-            loadStudents();
+             loadSubjects();
         }
     });
 
     document.getElementById('resultsPerPage').addEventListener('change', e => 
     {
         currentPage = 1;
-        loadStudents();
+         loadSubjects();
     });
 }
 /*async function loadSubjects()
