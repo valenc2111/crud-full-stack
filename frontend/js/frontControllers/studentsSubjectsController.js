@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () =>
     setupPaginationControls();//2.0
 });
 
+//2.1
 function setupPaginationControls() 
 {
     document.getElementById('prevPage').addEventListener('click', () => 
@@ -34,7 +35,7 @@ function setupPaginationControls()
         if (currentPage > 1) 
         {
             currentPage--;
-            loadRelations()
+            loadRelations();
         }
     });
 
@@ -43,14 +44,14 @@ function setupPaginationControls()
         if (currentPage < totalPages) 
         {
             currentPage++;
-            loadRelations()
+            loadRelations();
         }
     });
 
     document.getElementById('resultsPerPage').addEventListener('change', e => 
     {
         currentPage = 1;
-        loadRelations()
+        loadRelations();
     });
 }
 
@@ -141,28 +142,42 @@ function clearForm()
     document.getElementById('relationId').value = '';
 }
 
-async function loadRelations() {
-    try {
-        const response = await studentsSubjectsAPI.fetchPaginated(currentPage, limit);
+async function loadRelations() 
+{
+    try 
+    {
+       
+                //2.1
+        const resPerPage = parseInt(document.getElementById('resultsPerPage').value, 10) || limit;
+        const data = await studentsSubjectsAPI.fetchPaginated(currentPage, resPerPage);
+        console.log(data);
+        renderRelationsTable(data.students_subjects);
+        totalPages = Math.ceil(data.total / resPerPage);
+        document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+        
+        /**
+         * DEBUG
+         */
+        //console.log(relations);
 
-        // Si el backend devuelve { data, total }
-        const relations = response.data;
-        const total = response.total;
-
-        // Calcula el número total de páginas
-        totalPages = Math.ceil(total / limit);
-
-        // Convierte el campo approved a número
-        relations.forEach(rel => {
+        /**
+         * En JavaScript: Cualquier string que no esté vacío ("") es considerado truthy.
+         * Entonces "0" (que es el valor que llega desde el backend) es truthy,
+         * ¡aunque conceptualmente sea falso! por eso: 
+         * Se necesita convertir ese string "0" a un número real 
+         * o asegurarte de comparar el valor exactamente. 
+         * Con el siguiente código se convierten todos los string approved a enteros.
+         */
+       
+        data.students_subjects.forEach(rel => 
+        {
             rel.approved = Number(rel.approved);
         });
-
-        renderRelationsTable(relations);
-
-        // Actualiza el texto de paginación
-        document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+        
+        //renderRelationsTable(relations);
     } 
-    catch (err) {
+    catch (err) 
+    {
         console.error('Error cargando inscripciones:', err.message);
     }
 }
