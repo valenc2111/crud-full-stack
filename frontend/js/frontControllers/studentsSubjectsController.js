@@ -8,15 +8,16 @@
 *    Iteration   : 1.0 ( prototype )
 */
 
-import { studentsAPI } from '../apiConsumers/studentsAPI.js';
-import { subjectsAPI } from '../apiConsumers/subjectsAPI.js';
-import { studentsSubjectsAPI } from '../apiConsumers/studentsSubjectsAPI.js';
-
-//2.0
+//2.1
 //For pagination:
 let currentPage = 1;
 let totalPages = 1;
 const limit = 5;
+
+
+import { studentsAPI } from '../apiConsumers/studentsAPI.js';
+import { subjectsAPI } from '../apiConsumers/subjectsAPI.js';
+import { studentsSubjectsAPI } from '../apiConsumers/studentsSubjectsAPI.js';
 
 document.addEventListener('DOMContentLoaded', () => 
 {
@@ -24,37 +25,8 @@ document.addEventListener('DOMContentLoaded', () =>
     setupFormHandler();
     setupCancelHandler();
     loadRelations();
-    setupPaginationControls();//2.0
+    setupPaginationControls();//2.1
 });
-
-//2.1
-function setupPaginationControls() 
-{
-    document.getElementById('prevPage').addEventListener('click', () => 
-    {
-        if (currentPage > 1) 
-        {
-            currentPage--;
-            loadRelations();
-        }
-    });
-
-    document.getElementById('nextPage').addEventListener('click', () => 
-    {
-        if (currentPage < totalPages) 
-        {
-            currentPage++;
-            loadRelations();
-        }
-    });
-
-    document.getElementById('resultsPerPage').addEventListener('change', e => 
-    {
-        currentPage = 1;
-        loadRelations();
-    });
-}
-
 
 async function initSelects() 
 {
@@ -126,6 +98,34 @@ function setupCancelHandler()
     });
 }
 
+//2.1
+function setupPaginationControls() 
+{
+    document.getElementById('prevPage').addEventListener('click', () => 
+    {
+        if (currentPage > 1) 
+        {
+            currentPage--;
+            loadRelations();
+        }
+    });
+
+    document.getElementById('nextPage').addEventListener('click', () => 
+    {
+        if (currentPage < totalPages) 
+        {
+            currentPage++;
+            loadRelations();
+        }
+    });
+
+    document.getElementById('resultsPerPage').addEventListener('change', e => 
+    {
+        currentPage = 1;
+        loadRelations();
+    });
+}
+
 function getFormData() 
 {
     return{
@@ -191,8 +191,8 @@ function renderRelationsTable(relations)
     {
         const tr = document.createElement('tr');
 
-        tr.appendChild(createCell(rel.student_id));
-        tr.appendChild(createCell(rel.subject_id));
+        tr.appendChild(createCell(rel.student_fullname));
+        tr.appendChild(createCell(rel.subject_name));
         tr.appendChild(createCell(rel.approved ? 'Sí' : 'No'));
         tr.appendChild(createActionsCell(rel));
 
