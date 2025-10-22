@@ -11,14 +11,25 @@
 
 
 //2.0
-function getPaginatedStudents($conn, $limit, $offset) 
+function getPaginatedStudentsSubjects($conn, $limit, $offset) 
 {
-    $stmt = $conn->prepare("SELECT * FROM students_subjects LIMIT ? OFFSET ?");
+    $sql = "SELECT students_subjects.id,
+                   students_subjects.student_id,
+                   students_subjects.subject_id,
+                   students_subjects.approved,
+                   students.fullname AS student_fullname,
+                   subjects.name AS subject_name
+            FROM students_subjects
+            JOIN students ON students_subjects.student_id = students.id
+            JOIN subjects ON students_subjects.subject_id = subjects.id
+            LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $limit, $offset);
     $stmt->execute();
     $result = $stmt->get_result();
     return $result->fetch_all(MYSQLI_ASSOC);
 }
+
 
 //2.0
 function getTotalStudents($conn) 
